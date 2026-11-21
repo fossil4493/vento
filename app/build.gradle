@@ -15,7 +15,7 @@ plugins {
 // x86_64, and 12.1 MB that is neither. Splitting would save a phone 12.2 MB of
 // a 36.0 MB download and cost every consumer of this build a second artefact,
 // while also making versioning more complicated.
-final shippedAbis = ['arm64-v8a', 'x86_64']
+final shippedAbis = ['arm64-v8a']
 
 android {
     namespace = 'net.pgaskin.remotedesktop'

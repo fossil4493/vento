@@ -77,7 +77,7 @@ ext {
     // The linker's pin, taken by CargoBuildTask from each module's `ndkVersion`
     // rather than from the environment. r27 and later align to 16 KB by default.
     nativeNdkVersion = '28.2.13676358'
-    nativeAbis = ['arm64-v8a', 'x86_64']
+    nativeAbis = ['arm64-v8a']
     // The Meson the C backends are built with, as its release tarball: the
     // version is an input of the libraries' bytes, so it is pinned exactly.
     // The project's meson.build sets the oldest version it accepts.
