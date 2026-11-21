@@ -2487,7 +2487,11 @@ vento_session *vento_freerdp_create(const vento_freerdp_config *cfg, const vento
     s->clientName = dupOrNull(cfg->client_name);
     s->osMajorType = OSMAJORTYPE_UNSPECIFIED;
     if (cfg->platform && strcmp(cfg->platform, "android") == 0) {
-        s->osMajorType = OSMAJORTYPE_ANDROID;
+        /* GNOME Remote Desktop schaltet die Tonausgabe für Android- und
+           iOS-Clients pauschal ab ("Client cannot handle graphics and audio
+           simultaneously"). Soll der Ton hier spielen, das OS nicht nennen. */
+        s->osMajorType = (cfg->sound && strcmp(cfg->sound, "local") == 0)
+            ? OSMAJORTYPE_UNSPECIFIED : OSMAJORTYPE_ANDROID;
     } else if (cfg->platform && strcmp(cfg->platform, "linux") == 0) {
         s->osMajorType = OSMAJORTYPE_UNIX;
     }
