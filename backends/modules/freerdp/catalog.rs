@@ -124,6 +124,7 @@ pub static OPTIONS: &[Spec] = &[
         false,
         &[
             choice("gfx", "EGFX"),
+            choice("gfx-avc420", "EGFX, fast video (AVC420)"),
             choice("gfx-novideo", "EGFX, no video"),
             choice("rfx", "RemoteFX"),
             choice("bitmap", "Bitmap"),

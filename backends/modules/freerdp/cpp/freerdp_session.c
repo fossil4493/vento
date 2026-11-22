@@ -2113,10 +2113,14 @@ static void applySettings(Session *s, rdpSettings *settings) {
        Linux. RemoteFX is the older codec, and bitmaps are the fallback when a
        server supports neither. */
     const char *g = s->graphics ? s->graphics : "gfx";
-    const int gfx = strcmp(g, "gfx") == 0 || strcmp(g, "gfx-novideo") == 0;
+    /* gfx-avc420: H.264 ohne AVC444. AVC444 schickt zwei Videos, die das Gerät per CPU
+       zu einem Bild zusammensetzt; auf Tablets ruckelt das bei bewegten Inhalten. AVC420
+       dekodiert der Hardware-Decoder allein. Preis: nur Fähigkeiten bis 8.1 (siehe unten). */
+    const int avc420only = strcmp(g, "gfx-avc420") == 0;
+    const int gfx = strcmp(g, "gfx") == 0 || strcmp(g, "gfx-novideo") == 0 || avc420only;
     /* Without decoders (as in the probe), nothing that needs one is
        offered. */
-    const int h264 = strcmp(g, "gfx") == 0 && s->h264.available;
+    const int h264 = (strcmp(g, "gfx") == 0 || avc420only) && s->h264.available;
     const int rfx = gfx || strcmp(g, "rfx") == 0;
     freerdp_settings_set_bool(settings, FreeRDP_SupportGraphicsPipeline, gfx);
     freerdp_settings_set_bool(settings, FreeRDP_RemoteFxCodec, rfx);
@@ -2126,7 +2130,7 @@ static void applySettings(Session *s, rdpSettings *settings) {
        progressive v2, no scaling and no error-reporting caps. The useful
        choice is video or no video, which is this pair. */
     freerdp_settings_set_bool(settings, FreeRDP_GfxH264, h264);
-    freerdp_settings_set_bool(settings, FreeRDP_GfxAVC444, h264);
+    freerdp_settings_set_bool(settings, FreeRDP_GfxAVC444, h264 && !avc420only);
     freerdp_settings_set_bool(settings, FreeRDP_GfxProgressive, gfx);
     freerdp_settings_set_bool(settings, FreeRDP_GfxPlanar, gfx);
     freerdp_settings_set_bool(settings, FreeRDP_GfxSmallCache, FALSE);
